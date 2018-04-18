@@ -14,7 +14,8 @@ public class WordLoader
                 string combinedWords = asset.text;
                 if (!string.IsNullOrEmpty(combinedWords))
                 {
-                    string[] words = combinedWords.Split('\n');
+                    char[] sep = new char[] { '\n', '\r' };
+                    string[] words = combinedWords.Split(sep);
                     if (words.Length > 0)
                     {
                         return words;
