@@ -6,7 +6,9 @@ public class Test : MonoBehaviour
 {
 	void Start ()
     {
-        WordTreeHelper helper = new WordTreeHelper();
-        helper.DebugPrintTree("western");
-	}
+        WordTree helper = new WordTree();
+        float time = Time.realtimeSinceStartup;
+        string word = helper.FindWord("zealousnesses");
+        Debug.Log("End: " + word + ": " + (Time.realtimeSinceStartup - time));
+    }
 }

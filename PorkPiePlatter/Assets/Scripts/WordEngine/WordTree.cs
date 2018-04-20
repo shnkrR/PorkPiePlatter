@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WordTreeHelper
+public class WordTree
 {
     private WordLoader mWordLoader;
 
@@ -17,7 +17,7 @@ public class WordTreeHelper
     //also refactor init tree
     //
 
-    public WordTreeHelper()
+    public WordTree()
     {
         int depth = 1;
         mWordLoader = new WordLoader();
@@ -41,20 +41,73 @@ public class WordTreeHelper
     private void InitTree(ref int depthIndex, WordNode node, string word)
     {
         depthIndex++;
-        if ((depthIndex < depth) && (depthIndex < (word.Length - 1)))
+        if ((depthIndex < depth) && (depthIndex < (word.Length)))
         {
-            WordNode newNode = GetParentNode(word.Substring(0, depthIndex));
-            if (node.GetChild(newNode._ID) == null)
+            WordNode newNode = null;
+            if (node.GetChild(word.Substring(0, depthIndex)) == null)
             {
+                newNode = GetParentNode(word.Substring(0, depthIndex));
                 node.Add(newNode);
+                InitTree(ref depthIndex, newNode, word);
             }
-            InitTree(ref depthIndex, newNode, word);
+            else
+            {
+                newNode = node.GetChild(word.Substring(0, depthIndex));
+                node.Add(newNode);
+                InitTree(ref depthIndex, newNode, word);
+            }
         }
         else
         {
-            WordNode newNode = GetParentNode(word);
-            node.Add(newNode);
+            if (node.GetChild(word) == null)
+            {
+                WordNode newNode = GetParentNode(word);
+                node.Add(newNode);
+            }
         }
+    }
+
+    public string FindWord(string word)
+    {
+        int depth = 1;
+        string foundWord = "";
+        foundWord = FindWordInNode(ref depth, word, mWordTree);
+        return foundWord;
+    }
+
+    private string FindWordInNode(ref int depthIndex, string word, WordNode node)
+    {
+        string result = "";
+        if (!string.IsNullOrEmpty(word))
+        {
+            if ((depthIndex < depth) && (depthIndex < (word.Length)))
+            {
+                WordNode newNode = node.GetChild(word.Substring(0, depthIndex));
+                if (newNode != null)
+                {
+                    if (newNode._ID != word)
+                    {
+                        depthIndex++;
+                        result = FindWordInNode(ref depthIndex, word, newNode);
+                    }
+                    else
+                    {
+                        return newNode._ID;
+                    }
+                }
+            }
+            else
+            {
+                WordNode newNode = node.GetChild(word);
+                if (newNode != null)
+                {
+                    if (newNode._ID == word)
+                        return newNode._ID;
+                }
+            }
+        }
+
+        return result;
     }
 
     public void DebugPrintTree(string index)
