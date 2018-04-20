@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class WordLoader
 {
@@ -14,8 +12,8 @@ public class WordLoader
                 string combinedWords = asset.text;
                 if (!string.IsNullOrEmpty(combinedWords))
                 {
-                    char[] sep = new char[] { '\n', '\r' };
-                    string[] words = combinedWords.Split(sep);
+                    char[] sep = new char[] { '\r' , '\n' };
+                    string[] words = combinedWords.Split(sep, System.StringSplitOptions.RemoveEmptyEntries);
                     if (words.Length > 0)
                     {
                         return words;
