@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0de641c0bc5aac4b8ea6251402f71e6, type: 3}
+  m_Name: LetterDataCollection
+  m_EditorClassIdentifier: 
+  _Letters:
+  - _Letter: A
+    _Count: 9
+  - _Letter: B
+    _Count: 2
+  - _Letter: C
+    _Count: 2
+  - _Letter: D
+    _Count: 4
+  - _Letter: E
+    _Count: 1
+  - _Letter: F
+    _Count: 1
+  - _Letter: G
+    _Count: 1
+  - _Letter: H
+    _Count: 1
+  - _Letter: I
+    _Count: 1
+  - _Letter: J
+    _Count: 1
+  - _Letter: K
+    _Count: 1
+  - _Letter: L
+    _Count: 1
+  - _Letter: M
+    _Count: 1
+  - _Letter: N
+    _Count: 1
+  - _Letter: O
+    _Count: 1
+  - _Letter: P
+    _Count: 1
+  - _Letter: Q
+    _Count: 1
+  - _Letter: R
+    _Count: 1
+  - _Letter: S
+    _Count: 1
+  - _Letter: T
+    _Count: 1
+  - _Letter: U
+    _Count: 1
+  - _Letter: V
+    _Count: 1
+  - _Letter: W
+    _Count: 1
+  - _Letter: X
+    _Count: 1
+  - _Letter: Y
+    _Count: 1
+  - _Letter: Z
+    _Count: 1

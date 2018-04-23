@@ -118,7 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e449384eb3d255d4dbb03a854b3b9024, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _PlayerColor: {r: 0, g: 0, b: 0, a: 0}
+  _PlayerColor: {r: 0, g: 0.63529414, b: 1, a: 1}
   _SpriteTile: {fileID: 114379067888638142}
   _LabelLetter: {fileID: 114623719649600064}
 --- !u!114 &114902579907054406
