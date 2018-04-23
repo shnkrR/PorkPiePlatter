@@ -7,7 +7,12 @@ public class PanelLettersGrid : UIBase
     /// <summary>
     /// Grid to spawn letters in
     /// </summary>
-    public GridLayoutGroup _GridLetters;
+    public LayoutGroup _GridLetters;
+
+    /// <summary>
+    /// Grid where words are assigned
+    /// </summary>
+    public LayoutGroup _GridWords;
 
     /// <summary>
     /// Letter object pool
@@ -92,6 +97,7 @@ public class PanelLettersGrid : UIBase
                 if (letter != null)
                 {
                     letter.InitializeLetter();
+                    letter.OnLetterUsed += OnLetterPressed;
                     mObjectLetterPool.Add(letter);
                     objLetterInstance.transform.SetParent(_GridLetters.transform);
                     objLetterInstance.SetActive(false);
@@ -127,6 +133,7 @@ public class PanelLettersGrid : UIBase
                 if (letter != null)
                 {
                     letter.InitializeLetter();
+                    letter.OnLetterUsed += OnLetterPressed;
                     mObjectLetterPool.Add(letter);
                     objLetterInstance.transform.SetParent(_GridLetters.transform);
                     objLetterInstance.SetActive(false);
@@ -153,5 +160,26 @@ public class PanelLettersGrid : UIBase
     protected override void DestroyPanel()
     {
         base.DestroyPanel();
+
+        for (int i = 0; i < mObjectLetterPool.Count; i++)
+        {
+            mObjectLetterPool[i].OnLetterUsed -= OnLetterPressed;
+        }
     }
+
+    #region Button Messages
+    private void OnLetterPressed(PanelLetterObject letterObject, PanelLetterObject.eLetterState letterState)
+    {
+        switch (letterState)
+        {
+            case PanelLetterObject.eLetterState.DESELECTED:
+                letterObject._CachedTransform.SetParent(_GridLetters.transform);
+                break;
+
+            case PanelLetterObject.eLetterState.SELECTED:
+                letterObject._CachedTransform.SetParent(_GridWords.transform);
+                break;
+        }
+    }
+    #endregion
 }
