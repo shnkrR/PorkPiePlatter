@@ -15,6 +15,11 @@ public class PanelLettersGrid : UIBase
     public LayoutGroup _GridWords;
 
     /// <summary>
+    /// Submit button
+    /// </summary>
+    public Button _ButtonSubmit;
+
+    /// <summary>
     /// Letter object pool
     /// </summary>
     private List<PanelLetterObject> mObjectLetterPool;
@@ -25,21 +30,33 @@ public class PanelLettersGrid : UIBase
     private LetterBase mLetterBase;
 
     /// <summary>
+    /// Word Tree
+    /// </summary>
+    private WordTree mWordTree;
+
+    /// <summary>
     /// Size of the pool
     /// </summary>
     private const int LETTER_POOL_SIZE = 9;
 
     private int mNumLetters = 16;
 
+    private int mChosenLetters = 0;
+
+    private string mChosenWord = "";
+
 
     protected override void InitializePanel()
     {
         base.InitializePanel();
 
-        //Initialize the letter object pool
+        // Inititalizethe word tree
+        mWordTree = new WordTree();
+
+        // Initialize the letter object pool
         InitializeLetterObjects();
 
-        //Initialize the letter base
+        // Initialize the letter base
         mLetterBase = new LetterBase();
     }
 
@@ -48,6 +65,8 @@ public class PanelLettersGrid : UIBase
         base.EnablePanel();
 
         SpawnLetters();
+
+        _ButtonSubmit.interactable = false;
     }
 
     private void Update()
@@ -168,18 +187,58 @@ public class PanelLettersGrid : UIBase
     }
 
     #region Button Messages
-    private void OnLetterPressed(PanelLetterObject letterObject, PanelLetterObject.eLetterState letterState)
+    private void OnLetterPressed(PanelLetterObject letterObject)
     {
-        switch (letterState)
+        //There's probably a better way to do this. But it's 2 AM in the morning!
+        if (letterObject._CachedTransform.parent == _GridLetters.transform)
         {
-            case PanelLetterObject.eLetterState.DESELECTED:
-                letterObject._CachedTransform.SetParent(_GridLetters.transform);
-                break;
+            if (!letterObject._IsHidden)
+            {
+                PanelLetterObject letter = GetLetterObjects(mNumLetters + mChosenLetters);
+                letter._CachedTransform.SetParent(_GridWords.transform);
+                letter.EnableLetter(letterObject._Letter);
+                letter._CachedGameObject.SetActive(true);
+                letter._CustomData = letterObject;
+                letterObject.ShowLetter(false);
+                mChosenLetters++;
+                mChosenWord += letterObject._Letter;
 
-            case PanelLetterObject.eLetterState.SELECTED:
-                letterObject._CachedTransform.SetParent(_GridWords.transform);
-                break;
+                _ButtonSubmit.interactable = false;
+                if (!string.IsNullOrEmpty(mChosenWord))
+                {
+                    if (mWordTree.IsWordPresent(mChosenWord))
+                    {
+                        _ButtonSubmit.interactable = true;
+                    }
+                }
+            }
         }
+        else
+        {
+            if (letterObject._CachedTransform.parent == _GridWords.transform)
+            {
+                PanelLetterObject letter = letterObject._CustomData as PanelLetterObject;
+                letter.ShowLetter(true);
+                letterObject._CachedGameObject.SetActive(false);
+                letterObject._CachedTransform.SetParent(_GridLetters.transform);
+                mChosenLetters--;
+                mChosenWord = mChosenWord.Replace(letterObject._Letter, "");
+
+                _ButtonSubmit.interactable = false;
+                if (!string.IsNullOrEmpty(mChosenWord))
+                {
+                    if (mWordTree.IsWordPresent(mChosenWord))
+                    {
+                        _ButtonSubmit.interactable = true;
+                    }
+                }
+            }
+        }
+    }
+
+    public void OnWordSubmitted()
+    {
+
     }
     #endregion
 }

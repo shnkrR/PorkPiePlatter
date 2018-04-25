@@ -3,14 +3,7 @@ using UnityEngine.UI;
 
 public class PanelLetterObject : UIBase
 {
-    public enum eLetterState
-    {
-        SELECTED,
-        DESELECTED,
-    }
-
-
-    public System.Action<PanelLetterObject, PanelLetterObject.eLetterState> OnLetterUsed;
+    public System.Action<PanelLetterObject> OnLetterUsed;
 
     public Color _PlayerColor;
 
@@ -18,7 +11,11 @@ public class PanelLetterObject : UIBase
 
     public Text _LabelLetter;
 
-    private eLetterState mLetterState;
+    public string _Letter { get { return _LabelLetter.text; } }
+
+    public bool _IsHidden { get { return !_LabelLetter.enabled; } }
+
+    public object _CustomData { get; set; }
 
 
     public void InitializeLetter()
@@ -26,8 +23,6 @@ public class PanelLetterObject : UIBase
         InitializePanel();
 
         _SpriteTile.color = _PlayerColor;
-
-        mLetterState = eLetterState.DESELECTED;
     }
 
     public void EnableLetter(string letter)
@@ -35,14 +30,18 @@ public class PanelLetterObject : UIBase
         _LabelLetter.text = letter.ToUpper();
     }
 
+    public void ShowLetter(bool show)
+    {
+        _LabelLetter.enabled = show;
+        _SpriteTile.enabled = show;
+    }
+
     #region Button Messages
     public void OnLetterTilePressed()
     {
-        mLetterState = (mLetterState == eLetterState.SELECTED) ? eLetterState.DESELECTED : eLetterState.SELECTED;
-
         if (OnLetterUsed != null)
         {
-            OnLetterUsed(this, mLetterState);
+            OnLetterUsed(this);
         }
     }
     #endregion

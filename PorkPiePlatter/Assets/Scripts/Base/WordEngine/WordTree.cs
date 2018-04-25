@@ -23,6 +23,11 @@ public class WordTree
         public string _ID { get; private set; }
 
         /// <summary>
+        /// Is this a word present inthe word list
+        /// </summary>
+        public bool _IsWord { get; private set; }
+
+        /// <summary>
         /// The parent of this node
         /// </summary>
         public WordNode _Parent { get; private set; }
@@ -37,9 +42,10 @@ public class WordTree
         /// Creates a word node
         /// </summary>
         /// <param name="id">The word this node will hold</param>
-        public WordNode(string id)
+        public WordNode(string id, bool isWord)
         {
             _ID = id;
+            _IsWord = isWord;
         }
 
         /// <summary>
@@ -108,7 +114,7 @@ public class WordTree
     /// <summary>
     /// Instance of the word tree class
     /// </summary>
-    private WordNode mWordTree = new WordNode("Root");
+    private WordNode mWordTree = new WordNode("Root", false);
 
     /// <summary>
     /// Depth of the tree
@@ -135,7 +141,8 @@ public class WordTree
                 if (words[i].Length > 0)
                 {
                     //Get the main node that contains the first letter of the word
-                    WordNode node = GetNode(words[i].Substring(0, depth));
+                    string id = words[i].Substring(0, depth);
+                    WordNode node = GetNode(id, (id == words[i]));
                     InitTree(ref depth, node, words[i]);
                     depth = 1;
                 }
@@ -162,7 +169,8 @@ public class WordTree
             if (node.GetChild(word.Substring(0, depthIndex)) == null)
             {
                 // If not get/create a child node with the substring and add it to the parent
-                newNode = GetNode(word.Substring(0, depthIndex));
+                string id = word.Substring(0, depthIndex);
+                newNode = GetNode(id, (id == word));
                 node.Add(newNode);
                 InitTree(ref depthIndex, newNode, word);
             }
@@ -178,7 +186,7 @@ public class WordTree
             // Add the word to the parent node if the parent node does not have it
             if (node.GetChild(word) == null)
             {
-                WordNode newNode = GetNode(word);
+                WordNode newNode = GetNode(word, true);
                 node.Add(newNode);
             }
         }
@@ -204,6 +212,7 @@ public class WordTree
     /// <returns>True, If the word is present, else returns False</returns>
     public bool IsWordPresent(string word)
     {
+        word = word.ToLower();
         int depth = 1;
         string foundWord = "";
         foundWord = FindWordInNode(ref depth, word, mWordTree);
@@ -238,8 +247,12 @@ public class WordTree
                     }
                     else
                     {
-                        // If yes, return it
-                        return newNode._ID;
+                        // If yes, is it just a subword for sorting or an actual word
+                        if (newNode._IsWord)
+                        {
+                            // If yes, return it
+                            return newNode._ID;
+                        }
                     }
                 }
             }
@@ -249,9 +262,12 @@ public class WordTree
                 WordNode newNode = node.GetChild(word);
                 if (newNode != null)
                 {
-                    // If yes, double check and return
-                    if (newNode._ID == word)
+                    // If yes, is it just a subword for sorting or an actual word
+                    if (newNode._ID == word && newNode._IsWord)
+                    {
+                        // If yes, return it
                         return newNode._ID;
+                    }
                 }
             }
         }
@@ -277,13 +293,14 @@ public class WordTree
     /// Get a node with the ID. If it does not exist create it.
     /// </summary>
     /// <param name="nodeID">Node ID to get/create</param>
+    /// <param name="isWord">Is it a word</param>
     /// <returns>Node with entered ID</returns>
-    private WordNode GetNode(string nodeID)
+    private WordNode GetNode(string nodeID, bool isWord)
     {
         WordNode node = mWordTree.GetChild(nodeID);
         if (node == null)
         {
-            node = new WordNode(nodeID);
+            node = new WordNode(nodeID, isWord);
             mWordTree.Add(node);
         }
 
