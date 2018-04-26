@@ -192,8 +192,11 @@ public class PanelLettersGrid : UIBase
         //There's probably a better way to do this. But it's 2 AM in the morning!
         if (letterObject._CachedTransform.parent == _GridLetters.transform)
         {
+            // Selected a letter from the list of letters from the bottom
             if (!letterObject._IsHidden)
             {
+                // Make sure the letter hasn't already been selected
+                // Hide the letter, get a new letter from the pool and set it to the word grid on top
                 PanelLetterObject letter = GetLetterObjects(mNumLetters + mChosenLetters);
                 letter._CachedTransform.SetParent(_GridWords.transform);
                 letter.EnableLetter(letterObject._Letter);
@@ -203,6 +206,7 @@ public class PanelLettersGrid : UIBase
                 mChosenLetters++;
                 mChosenWord += letterObject._Letter;
 
+                // If the resulting word is a valid word, enable the submit button, otherwise don't
                 _ButtonSubmit.interactable = false;
                 if (!string.IsNullOrEmpty(mChosenWord))
                 {
@@ -215,8 +219,11 @@ public class PanelLettersGrid : UIBase
         }
         else
         {
+            // Selected a letter from the word on top
             if (letterObject._CachedTransform.parent == _GridWords.transform)
             {
+                // Remove the letter from the word grid and send it back to the pool
+                // Enable the hidden letter in the letter grid
                 PanelLetterObject letter = letterObject._CustomData as PanelLetterObject;
                 letter.ShowLetter(true);
                 letterObject._CachedGameObject.SetActive(false);
@@ -224,6 +231,7 @@ public class PanelLettersGrid : UIBase
                 mChosenLetters--;
                 mChosenWord = mChosenWord.Replace(letterObject._Letter, "");
 
+                // If the resulting word is a valid word, enable the submit button, otherwise don't
                 _ButtonSubmit.interactable = false;
                 if (!string.IsNullOrEmpty(mChosenWord))
                 {
@@ -238,7 +246,37 @@ public class PanelLettersGrid : UIBase
 
     public void OnWordSubmitted()
     {
+        // Get the score of the word adn submit it to the leaderboard
+        int score = mWordTree.GetWordScore(mChosenWord);
+        GameManager._Instance.SubmitScore(score);
 
+        // Remove the used letters and replace them with new ones
+        for (int i = 0; i < mObjectLetterPool.Count; i++)
+        {
+            if (mObjectLetterPool[i]._CachedTransform.parent == _GridWords.transform)
+            {
+                // Place the letters in the word grid back into the pool
+                mObjectLetterPool[i]._CachedGameObject.SetActive(false);
+                mObjectLetterPool[i]._CachedTransform.SetParent(_GridLetters.transform);
+            }
+            else
+            {
+                if (mObjectLetterPool[i]._CachedTransform.parent == _GridLetters.transform)
+                {
+                    if (mObjectLetterPool[i]._IsHidden)
+                    {
+                        // Change the hidden letters to different letters
+                        mObjectLetterPool[i].EnableLetter(mLetterBase.GetLetters(1)[0]);
+                        mObjectLetterPool[i].ShowLetter(true);
+                    }
+                }
+            }
+        }
+
+        // Reset cached variables
+        mChosenLetters = 0;
+        mChosenWord = "";
+        _ButtonSubmit.interactable = false;
     }
     #endregion
 }

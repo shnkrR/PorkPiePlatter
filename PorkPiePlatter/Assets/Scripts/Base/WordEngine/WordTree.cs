@@ -220,6 +220,16 @@ public class WordTree
     }
 
     /// <summary>
+    /// Get the score of a word
+    /// </summary>
+    /// <param name="word">Word to score</param>
+    /// <returns>score</returns>
+    public int GetWordScore(string word)
+    {
+        return word.Length;
+    }
+
+    /// <summary>
     /// Recursively checks every node to see if the word is present
     /// </summary>
     /// <param name="depthIndex">Current index of the depth of the tree</param>
