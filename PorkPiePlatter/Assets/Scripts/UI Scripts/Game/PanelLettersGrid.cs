@@ -19,6 +19,8 @@ public class PanelLettersGrid : UIBase
     /// </summary>
     public Button _ButtonSubmit;
 
+    public PanelLeaderboard _PanelLeaderboard;
+
     /// <summary>
     /// Letter object pool
     /// </summary>
@@ -72,7 +74,7 @@ public class PanelLettersGrid : UIBase
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
-            SpawnLetters();
+            _PanelLeaderboard.Enable();
     }
 
     /// <summary>
@@ -125,6 +127,7 @@ public class PanelLettersGrid : UIBase
                 else
                 {
                     Destroy(objLetterInstance);
+                    objLetterInstance = null;
                 }
             }
         }
@@ -183,7 +186,12 @@ public class PanelLettersGrid : UIBase
         for (int i = 0; i < mObjectLetterPool.Count; i++)
         {
             mObjectLetterPool[i].OnLetterUsed -= OnLetterPressed;
+            Destroy(mObjectLetterPool[i]._CachedGameObject);
+            mObjectLetterPool[i] = null;
         }
+
+        mObjectLetterPool.Clear();
+        mObjectLetterPool = null;
     }
 
     #region Button Messages

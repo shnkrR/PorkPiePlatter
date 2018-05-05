@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
 
     private int mSessionScore;
 
+    private const int MAX_SCORES = 10;
+
 
     private void Awake()
     {
@@ -20,6 +22,7 @@ public class GameManager : MonoBehaviour
         if (mScores == null) mScores = new List<int>();
     }
 
+    #region Leaderboards
     private List<int> LoadScores()
     {
         string scoreString = PlayerPrefs.GetString(StringIdentifier.PREF_SCORE, "");
@@ -49,8 +52,9 @@ public class GameManager : MonoBehaviour
 
     private void SaveScores()
     {
+        mScores.Sort((a, b) => -1 * a.CompareTo(b));
         string saveString = "";
-        for (int i = 0; i < mScores.Count; i++)
+        for (int i = 0; i < Mathf.Min(mScores.Count, MAX_SCORES); i++)
         {
             saveString += "" + mScores[i] + "|";
         }
@@ -71,4 +75,16 @@ public class GameManager : MonoBehaviour
             SaveScores();
         }
     }
+
+    public List<int> GetLeaderboard()
+    {
+        if (mScores != null && mScores.Count > 0)
+        {
+            mScores.Sort((a, b) => -1 * a.CompareTo(b));
+            return mScores;
+        }
+
+        return null;
+    }
+    #endregion
 }

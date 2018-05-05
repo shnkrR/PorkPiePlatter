@@ -8,7 +8,8 @@ public struct StringIdentifier
     public static string RESOURCE_PATH_LETTER_COLLECTION_FOLDER = "Letter Collection";
     public static string RESOURCE_PATH_LETTER_COLLECTION = "Letter Collection/LetterDataCollection";
 
-    public static string UI_PREFAB_LETTER_TILE = "UI Assets/Game/ButtonLetterTile";
+    public static string UI_PREFAB_LETTER_TILE = "UI Assets/Game/LetterTileObject";
+    public static string UI_PREFAB_LEADERBOARD_OBJECT = "UI Assets/Game/LeaderboardObject";
 
     public static string PREF_SCORE = "Score";
 }
