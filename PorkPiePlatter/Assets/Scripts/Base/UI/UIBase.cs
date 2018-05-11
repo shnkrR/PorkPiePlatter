@@ -37,16 +37,16 @@ public class UIBase : MonoBehaviour
 
     protected virtual void EnablePanel()
     {
-
+        
     }
 
     protected virtual void DisablePanel()
     {
-
+        
     }
 
     protected virtual void DestroyPanel()
     {
-
+        
     }
 }

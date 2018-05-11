@@ -3,7 +3,23 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager _Instance { get; private set; }
+    public static GameManager _Instance
+    {
+        get
+        {
+            if (mInstance == null)
+            {
+                GameObject obj = new GameObject("GameManager");
+                mInstance = obj.AddComponent<GameManager>();
+            }
+
+            return mInstance;
+        }
+    }
+
+    private static GameManager mInstance;
+
+    public System.Action OnPressBack;
 
     private List<int> mScores;
 
@@ -14,12 +30,29 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        _Instance = this;
+        mInstance = this;
 
         mSessionScore = 0;
 
         mScores = LoadScores();
         if (mScores == null) mScores = new List<int>();
+    }
+
+    private void Update()
+    {
+        // Handle the back key/button functionality
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (OnPressBack == null)
+            {
+                // Show quit popup
+                Debug.LogError("Quit");
+            }
+            else
+            {
+                OnPressBack();
+            }
+        }
     }
 
     #region Leaderboards

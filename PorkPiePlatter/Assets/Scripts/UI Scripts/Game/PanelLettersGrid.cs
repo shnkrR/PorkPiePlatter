@@ -19,7 +19,15 @@ public class PanelLettersGrid : UIBase
     /// </summary>
     public Button _ButtonSubmit;
 
+    /// <summary>
+    /// The leaderboard panel
+    /// </summary>
     public PanelLeaderboard _PanelLeaderboard;
+
+    /// <summary>
+    /// The gameobject that'll hide/show the game
+    /// </summary>
+    public GameObject _ObjGame;
 
     /// <summary>
     /// Letter object pool
@@ -285,6 +293,12 @@ public class PanelLettersGrid : UIBase
         mChosenLetters = 0;
         mChosenWord = "";
         _ButtonSubmit.interactable = false;
+    }
+
+    public void OnLeaderboard()
+    {
+        _PanelLeaderboard.Enable();
+        _ObjGame.SetActive(false);
     }
     #endregion
 }
