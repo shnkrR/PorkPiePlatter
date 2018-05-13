@@ -37,16 +37,22 @@ public class UIBase : MonoBehaviour
 
     protected virtual void EnablePanel()
     {
-        
+        if (_CachedGameObject == null)
+        {
+            InitializePanel();
+        }
+
+        _CachedGameObject.SetActive(true);
     }
 
     protected virtual void DisablePanel()
     {
-        
+        _CachedGameObject.SetActive(false);
     }
 
     protected virtual void DestroyPanel()
     {
-        
+        _CachedGameObject = null;
+        _CachedTransform = null;
     }
 }

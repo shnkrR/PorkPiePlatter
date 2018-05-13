@@ -30,6 +30,14 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        if (mInstance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        gameObject.name = "GameManager";
+
         mInstance = this;
 
         mSessionScore = 0;
@@ -46,7 +54,7 @@ public class GameManager : MonoBehaviour
             if (OnPressBack == null)
             {
                 // Show quit popup
-                Debug.LogError("Quit");
+                Application.Quit();
             }
             else
             {

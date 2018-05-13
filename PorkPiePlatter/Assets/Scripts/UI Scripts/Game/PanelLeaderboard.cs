@@ -6,6 +6,8 @@ public class PanelLeaderboard : UIBase
 {
     public LayoutGroup _GridLeaderboard;
 
+    public GameObject _ObjGame;
+
     private List<PanelLeaderboardObject> mObjectLeaderboardPool;
 
     private const int LEADERBOARD_POOL_SIZE = 10; 
@@ -72,6 +74,8 @@ public class PanelLeaderboard : UIBase
     {
         EnablePanel();
 
+        GameManager._Instance.OnPressBack += Disable;
+
         DisplayLeaderboard();
     }
 
@@ -86,7 +90,7 @@ public class PanelLeaderboard : UIBase
                 PanelLeaderboardObject leaderboardObject = GetLeaderboardObject(index);
                 if (leaderboardObject != null)
                 {
-                    leaderboardObject.EnableLeaderboardObject(index, "Player", scores[index]);
+                    leaderboardObject.EnableLeaderboardObject(index + 1, "Player", scores[index]);
                     leaderboardObject._CachedGameObject.SetActive(true);
                 }
             }
@@ -101,11 +105,17 @@ public class PanelLeaderboard : UIBase
 
     public void Disable()
     {
+        GameManager._Instance.OnPressBack -= Disable;
+
+        _ObjGame.SetActive(true);
+
         base.DisablePanel();
     }
 
     protected override void DestroyPanel()
     {
+        GameManager._Instance.OnPressBack -= Disable;
+
         base.DestroyPanel();
     }
 }

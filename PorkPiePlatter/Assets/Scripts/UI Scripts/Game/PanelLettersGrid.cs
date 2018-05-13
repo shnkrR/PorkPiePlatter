@@ -298,6 +298,7 @@ public class PanelLettersGrid : UIBase
     public void OnLeaderboard()
     {
         _PanelLeaderboard.Enable();
+
         _ObjGame.SetActive(false);
     }
     #endregion
