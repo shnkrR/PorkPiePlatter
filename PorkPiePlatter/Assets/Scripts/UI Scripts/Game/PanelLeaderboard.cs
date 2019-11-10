@@ -23,17 +23,20 @@ public class PanelLeaderboard : UIBase
     #region Leaderboard Object Pool
     private void InitializeLetterObjects()
     {
-        mObjectLeaderboardPool = new List<PanelLeaderboardObject>();
-
-        GameObject objLeaderboard = Resources.Load<GameObject>(StringIdentifier.UI_PREFAB_LEADERBOARD_OBJECT);
-        if (objLeaderboard != null)
+        if (mObjectLeaderboardPool == null)
         {
-            for (int i = 0; i < LEADERBOARD_POOL_SIZE; i++)
+            mObjectLeaderboardPool = new List<PanelLeaderboardObject>();
+
+            GameObject objLeaderboard = Resources.Load<GameObject>(StringIdentifier.UI_PREFAB_LEADERBOARD_OBJECT);
+            if (objLeaderboard != null)
             {
-                GetLeaderboardObject(i);
+                for (int i = 0; i < LEADERBOARD_POOL_SIZE; i++)
+                {
+                    GetLeaderboardObject(i);
+                }
             }
+            objLeaderboard = null;
         }
-        objLeaderboard = null;
     }
 
     public PanelLeaderboardObject GetLeaderboardObject(int index)
@@ -54,7 +57,7 @@ public class PanelLeaderboard : UIBase
                     leaderboardObject.InitializeLeaderboardEntry();
                     leaderboardObject._CachedGameObject.SetActive(false);
                     mObjectLeaderboardPool.Add(leaderboardObject);
-                    objLeaderboardInstance.transform.SetParent(_GridLeaderboard.transform);
+                    objLeaderboardInstance.transform.SetParent(_GridLeaderboard.transform, false);
                     objLeaderboardInstance.name = index.ToString("00") + "_LeaderboardObject";
                 }
                 else

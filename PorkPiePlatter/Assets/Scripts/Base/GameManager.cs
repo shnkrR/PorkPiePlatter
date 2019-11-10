@@ -63,6 +63,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        Destroy(gameObject);
+    }
+
     #region Leaderboards
     private List<int> LoadScores()
     {
@@ -125,7 +130,7 @@ public class GameManager : MonoBehaviour
             return mScores;
         }
 
-        return null;
+        return new List<int>();
     }
     #endregion
 }
